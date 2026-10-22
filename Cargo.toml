@@ -1,0 +1,11 @@
+[package]
+name = "batten"
+version = "0.0.1-alpha.1"
+edition = "2024"
+authors = ["Colin Wolff"]
+description = "Dynamic variable-scope to Context-Free Grammar (GBNF/Lark) compiler and token mask generator."
+license = "Apache-2.0"
+repository = "https://github.com/gaugeblock/batten"
+readme = "README.md"
+keywords = ["ast", "neurosymbolic", "codegen", "llm", "compiler"]
+categories = ["development-tools", "compilers", "command-line-utilities"]
