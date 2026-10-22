@@ -10,6 +10,7 @@ pub mod grammar;
 pub mod model;
 pub mod scope_filter;
 pub mod type_norm;
+pub mod validator;
 
 pub use error::{BattenError, Result};
 pub use grammar::{GrammarConfig, compile_grammar, compile_grammar_with_config};
@@ -22,6 +23,7 @@ pub use type_norm::{
     TypeMatch, evaluate_type_compatibility, extract_return_type, extract_unwrapped_type,
     normalize_type_str,
 };
+pub use validator::{GrammarViolation, ValidationReport, validate_candidate};
 
 /// Version of the `batten-core` crate.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
