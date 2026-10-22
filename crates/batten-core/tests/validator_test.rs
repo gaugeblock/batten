@@ -72,3 +72,4 @@ fn test_validator_detects_unbalanced_delimiters() {
         GrammarViolation::UnbalancedDelimiter { expected: ')', .. }
     )));
 }
+
