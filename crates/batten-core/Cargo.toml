@@ -1,9 +1,23 @@
 [package]
 name = "batten-core"
-version = "0.0.1-alpha.1"
-edition = "2024"
-authors = ["Colin Wolff"]
-description = "Core library and traits for batten:Dynamic variable-scope to Context-Free Grammar (GBNF/Lark) compiler and token mask generator."
-license = "Apache-2.0"
-repository = "https://github.com/gaugeblock/batten"
-readme = "../../README.md"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Core library, type normalizer, scope filter, and CFG emitters for batten"
+
+[lints]
+workspace = true
+
+[dependencies]
+miter-engine = "0.1.0-alpha.2"
+dado-core = "0.1.0-beta.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+thiserror = "2.0"
+tracing = "0.1"
+regex = "1.11"
+
+[dev-dependencies]
+tempfile = "3.10"
