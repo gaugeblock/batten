@@ -6,11 +6,13 @@
 #![warn(missing_docs)]
 
 pub mod error;
+pub mod grammar;
 pub mod model;
 pub mod scope_filter;
 pub mod type_norm;
 
 pub use error::{BattenError, Result};
+pub use grammar::{GrammarConfig, compile_grammar, compile_grammar_with_config};
 pub use model::{
     CandidateClassification, CompiledGrammarConstraint, FilteredScope, GrammarFormat, LexicalScope,
     ScopeCandidate, ScopeSymbolKind, SymbolBinding, SymbolKind,
