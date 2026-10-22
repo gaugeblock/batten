@@ -1,0 +1,8 @@
+{
+  "hole_id": "user_lookup",
+  "expected_type": "User",
+  "ast_node_kind": "expression",
+  "max_tokens": 64,
+  "allow_literals": false
+}
+

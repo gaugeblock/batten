@@ -45,7 +45,9 @@ fn escape_gbnf_str(s: &str) -> String {
 fn emit_gbnf_predicate(out: &mut String, idents: &str, allow_literals: bool) {
     out.push_str("root ::= pred_expr\n");
     out.push_str("pred_expr ::= ( \"!\" ws )? pred_atom ( ws pred_op ws pred_atom )?\n");
-    out.push_str("pred_op ::= \"==\" | \"!=\" | \"<=\" | \">=\" | \"<\" | \">\" | \"&&\" | \"||\"\n");
+    out.push_str(
+        "pred_op ::= \"==\" | \"!=\" | \"<=\" | \">=\" | \"<\" | \">\" | \"&&\" | \"||\"\n",
+    );
     out.push_str("pred_atom ::= ident ( \".\" method_check )? | literal\n");
     out.push_str("method_check ::= \"is_some()\" | \"is_ok()\" | \"is_err()\" | \"is_empty()\"\n");
     out.push_str(&format!("ident ::= {idents}\n"));
@@ -56,12 +58,7 @@ fn emit_gbnf_predicate(out: &mut String, idents: &str, allow_literals: bool) {
     }
 }
 
-fn emit_gbnf_expression(
-    out: &mut String,
-    idents: &str,
-    allow_literals: bool,
-    max_depth: usize,
-) {
+fn emit_gbnf_expression(out: &mut String, idents: &str, allow_literals: bool, max_depth: usize) {
     out.push_str("root ::= expr_0\n");
 
     for d in 0..max_depth {
@@ -110,4 +107,3 @@ fn emit_gbnf_type_annotation(out: &mut String, scope: &FilteredScope) {
 
     out.push_str("wrapper_type ::= \"Option<\" ws type_expr ws \">\" | \"Result<\" ws type_expr ws \",\" ws type_expr ws \">\"\n");
 }
-

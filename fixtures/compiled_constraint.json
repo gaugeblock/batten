@@ -1,0 +1,10 @@
+{
+  "hole_id": "user_lookup",
+  "format": "gbnf",
+  "grammar_definition": "root ::= expr_0\nexpr_0 ::= expr_1 ( ws bin_op ws expr_1 )?\nexpr_1 ::= expr_2 ( ws bin_op ws expr_2 )?\nexpr_2 ::= expr_3 ( ws bin_op ws expr_3 )?\nexpr_3 ::= atom ( \".\" member_call | \"?\" | \".await\" )*\natom ::= ident ( \"(\" ( ws ident ( ws \",\" ws ident )* )? ws \")\" )? | \"(\" ws expr_0 ws \")\"\nbin_op ::= \"+\" | \"-\" | \"*\" | \"/\" | \"==\" | \"!=\" | \"&&\" | \"||\"\nmember_call ::= [a-zA-Z_][a-zA-Z0-9_]* ( \"()\" )?\nident ::= \"db\" | \"find_user_by_email\" | \"req\"\nws ::= [ \\t\\n\\r]*\n",
+  "allowed_identifiers": [
+    "db",
+    "find_user_by_email",
+    "req"
+  ]
+}

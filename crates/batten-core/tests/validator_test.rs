@@ -1,6 +1,4 @@
-use batten_core::{
-    CompiledGrammarConstraint, GrammarFormat, GrammarViolation, validate_candidate,
-};
+use batten_core::{CompiledGrammarConstraint, GrammarFormat, GrammarViolation, validate_candidate};
 
 #[test]
 fn test_validator_accepts_clean_in_scope_candidate() {
@@ -72,4 +70,3 @@ fn test_validator_detects_unbalanced_delimiters() {
         GrammarViolation::UnbalancedDelimiter { expected: ')', .. }
     )));
 }
-

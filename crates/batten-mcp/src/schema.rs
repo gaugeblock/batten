@@ -61,7 +61,6 @@ pub fn list_tools() -> Vec<Value> {
                 },
                 "required": ["candidate", "constraint"]
             }
-        })
+        }),
     ]
 }
-

@@ -47,7 +47,7 @@ pub enum Command {
         scope: PathBuf,
 
         /// Path to TypedHole JSON file.
-        #[arg(short, long)]
+        #[arg(long)]
         hole: PathBuf,
 
         /// Grammar output format.
@@ -74,7 +74,7 @@ pub enum Command {
         candidate: String,
 
         /// Path to CompiledGrammarConstraint JSON file.
-        #[arg(short, long)]
+        #[arg(long)]
         constraint: PathBuf,
 
         /// Permit literal constants in candidate.
@@ -97,7 +97,7 @@ pub enum Command {
         scope: PathBuf,
 
         /// Path to TypedHole JSON file.
-        #[arg(short, long)]
+        #[arg(long)]
         hole: PathBuf,
 
         /// Format output as JSON.
@@ -108,4 +108,3 @@ pub enum Command {
     /// Starts the Model Context Protocol (MCP) JSON-RPC 2.0 stdio server.
     Mcp,
 }
-

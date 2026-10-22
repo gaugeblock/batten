@@ -63,4 +63,3 @@ fn test_mcp_tool_call_validate() -> Result<(), Box<dyn std::error::Error>> {
     assert!(text.contains("\"is_valid\": true"));
     Ok(())
 }
-

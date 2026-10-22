@@ -35,13 +35,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             max_tokens,
             json,
         } => {
-            handlers::handle_validate(
-                &candidate,
-                &constraint,
-                allow_literals,
-                max_tokens,
-                json,
-            )?;
+            handlers::handle_validate(&candidate, &constraint, allow_literals, max_tokens, json)?;
         }
         Command::Inspect { scope, hole, json } => {
             handlers::handle_inspect(&scope, &hole, json)?;

@@ -107,4 +107,3 @@ pub fn check_balanced_delimiters(candidate: &str) -> Vec<GrammarViolation> {
 
     violations
 }
-

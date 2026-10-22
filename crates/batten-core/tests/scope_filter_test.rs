@@ -87,8 +87,16 @@ fn test_two_tier_scope_filter() {
         CandidateClassification::ProducerChain
     );
 
-    assert!(filtered.allowed_identifiers.contains(&"current_user".to_string()));
-    assert!(filtered.allowed_identifiers.contains(&"find_user".to_string()));
+    assert!(
+        filtered
+            .allowed_identifiers
+            .contains(&"current_user".to_string())
+    );
+    assert!(
+        filtered
+            .allowed_identifiers
+            .contains(&"find_user".to_string())
+    );
 }
 
 #[test]

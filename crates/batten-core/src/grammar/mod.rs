@@ -56,4 +56,3 @@ pub fn compile_grammar_with_config(
         allowed_identifiers: scope.allowed_identifiers.clone(),
     })
 }
-

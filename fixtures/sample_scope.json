@@ -1,0 +1,30 @@
+{
+  "repo_relative_path": "src/api/handler.rs",
+  "language": "rust",
+  "enclosing_symbol": "create_user",
+  "bindings": [
+    {
+      "name": "req",
+      "ty": "CreateUserRequest",
+      "is_mutable": false,
+      "kind": "parameter"
+    },
+    {
+      "name": "db",
+      "ty": "sqlx::PgPool",
+      "is_mutable": false,
+      "kind": "local_var"
+    },
+    {
+      "name": "find_user_by_email",
+      "ty": "fn(&str) -> Result<User, AppError>",
+      "is_mutable": false,
+      "kind": "function"
+    }
+  ],
+  "available_imports": [
+    "crate::models::User",
+    "crate::errors::AppError"
+  ]
+}
+

@@ -23,17 +23,23 @@ pub fn dispatch_tool(name: &str, args: &Value) -> Value {
 }
 
 fn handle_compile(args: &Value) -> Value {
-    let scope: LexicalScope = match serde_json::from_value(args.get("scope").cloned().unwrap_or(Value::Null)) {
-        Ok(s) => s,
-        Err(e) => return error_response(&format!("Invalid scope argument: {e}")),
-    };
+    let scope: LexicalScope =
+        match serde_json::from_value(args.get("scope").cloned().unwrap_or(Value::Null)) {
+            Ok(s) => s,
+            Err(e) => return error_response(&format!("Invalid scope argument: {e}")),
+        };
 
-    let hole: TypedHole = match serde_json::from_value(args.get("hole").cloned().unwrap_or(Value::Null)) {
-        Ok(h) => h,
-        Err(e) => return error_response(&format!("Invalid hole argument: {e}")),
-    };
+    let hole: TypedHole =
+        match serde_json::from_value(args.get("hole").cloned().unwrap_or(Value::Null)) {
+            Ok(h) => h,
+            Err(e) => return error_response(&format!("Invalid hole argument: {e}")),
+        };
 
-    let format = match args.get("format").and_then(|v| v.as_str()).unwrap_or("gbnf") {
+    let format = match args
+        .get("format")
+        .and_then(|v| v.as_str())
+        .unwrap_or("gbnf")
+    {
         "gbnf" => GrammarFormat::Gbnf,
         "lark" => GrammarFormat::Lark,
         "regex" => GrammarFormat::Regex,
@@ -64,12 +70,11 @@ fn handle_validate(args: &Value) -> Value {
         None => return error_response("Missing required 'candidate' string"),
     };
 
-    let constraint: CompiledGrammarConstraint = match serde_json::from_value(
-        args.get("constraint").cloned().unwrap_or(Value::Null),
-    ) {
-        Ok(c) => c,
-        Err(e) => return error_response(&format!("Invalid constraint argument: {e}")),
-    };
+    let constraint: CompiledGrammarConstraint =
+        match serde_json::from_value(args.get("constraint").cloned().unwrap_or(Value::Null)) {
+            Ok(c) => c,
+            Err(e) => return error_response(&format!("Invalid constraint argument: {e}")),
+        };
 
     let allow_literals = args
         .get("allow_literals")
@@ -102,4 +107,3 @@ fn error_response(msg: &str) -> Value {
         }]
     })
 }
-

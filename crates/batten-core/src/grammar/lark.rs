@@ -56,12 +56,7 @@ fn emit_lark_predicate(out: &mut String, idents: &str, allow_literals: bool) {
     }
 }
 
-fn emit_lark_expression(
-    out: &mut String,
-    idents: &str,
-    allow_literals: bool,
-    max_depth: usize,
-) {
+fn emit_lark_expression(out: &mut String, idents: &str, allow_literals: bool, max_depth: usize) {
     out.push_str("start: expr_0\n");
 
     for d in 0..max_depth {
@@ -73,9 +68,7 @@ fn emit_lark_expression(
     out.push_str(&format!(
         "expr_{atom_level}: atom (\".\" member_call | \"?\" | \".await\")*\n"
     ));
-    out.push_str(
-        "atom: ident [\"(\" [ident (\",\" ident)*] \")\"] | \"(\" expr_0 \")\"",
-    );
+    out.push_str("atom: ident [\"(\" [ident (\",\" ident)*] \")\"] | \"(\" expr_0 \")\"");
     if allow_literals {
         out.push_str(" | literal\n");
         out.push_str("literal: NUMBER | STRING | \"true\" | \"false\"\n");
@@ -108,6 +101,7 @@ fn emit_lark_type_annotation(out: &mut String, scope: &FilteredScope) {
         out.push_str(&format!("custom_type: {}\n", custom_types.join(" | ")));
     }
 
-    out.push_str("wrapper_type: \"Option<\" type_expr \">\" | \"Result<\" type_expr \",\" type_expr \">\"\n");
+    out.push_str(
+        "wrapper_type: \"Option<\" type_expr \">\" | \"Result<\" type_expr \",\" type_expr \">\"\n",
+    );
 }
-

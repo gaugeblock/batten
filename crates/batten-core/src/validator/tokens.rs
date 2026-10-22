@@ -12,8 +12,8 @@ pub struct ExtractedTokens {
 }
 
 const RUST_KEYWORDS: &[&str] = &[
-    "let", "mut", "await", "true", "false", "if", "else", "match", "return", "as", "fn",
-    "async", "self", "Self", "crate", "super",
+    "let", "mut", "await", "true", "false", "if", "else", "match", "return", "as", "fn", "async",
+    "self", "Self", "crate", "super",
 ];
 
 const STANDARD_CONSTRUCTORS: &[&str] = &[
@@ -125,4 +125,3 @@ pub fn extract_tokens_and_literals(candidate: &str) -> ExtractedTokens {
         literals,
     }
 }
-

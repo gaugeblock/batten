@@ -39,9 +39,13 @@ fn emit_regex_predicate(idents: &str, allow_literals: bool) -> String {
 
 fn emit_regex_expression(idents: &str, allow_literals: bool) -> String {
     let atom = if allow_literals {
-        format!("(?:(?:{idents})(?:\\s*\\((?:\\s*(?:{idents})(?:\\s*,\\s*(?:{idents}))*)?\\s*\\))?|[0-9]+|\"[^\"]*\"|true|false)")
+        format!(
+            "(?:(?:{idents})(?:\\s*\\((?:\\s*(?:{idents})(?:\\s*,\\s*(?:{idents}))*)?\\s*\\))?|[0-9]+|\"[^\"]*\"|true|false)"
+        )
     } else {
-        format!("(?:(?:{idents})(?:\\s*\\((?:\\s*(?:{idents})(?:\\s*,\\s*(?:{idents}))*)?\\s*\\))?)")
+        format!(
+            "(?:(?:{idents})(?:\\s*\\((?:\\s*(?:{idents})(?:\\s*,\\s*(?:{idents}))*)?\\s*\\))?)"
+        )
     };
 
     let chain = "(?:\\.[a-zA-Z_][a-zA-Z0-9_]*(?:\\(\\))?|\\?|\\.await)*";
@@ -65,6 +69,7 @@ fn emit_regex_type_annotation(scope: &FilteredScope) -> String {
     types.extend(custom_types);
     let type_alt = types.join("|");
 
-    format!("^(?:{type_alt}|Option<\\s*(?:{type_alt})\\s*>|Result<\\s*(?:{type_alt})\\s*,\\s*(?:{type_alt})\\s*>)$")
+    format!(
+        "^(?:{type_alt}|Option<\\s*(?:{type_alt})\\s*>|Result<\\s*(?:{type_alt})\\s*,\\s*(?:{type_alt})\\s*>)$"
+    )
 }
-
