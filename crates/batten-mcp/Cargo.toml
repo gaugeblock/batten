@@ -11,9 +11,9 @@ description = "Model Context Protocol server for batten grammar compiler"
 workspace = true
 
 [dependencies]
-batten-core = { path = "../batten-core", version = "0.1.0-beta.1" }
-dado-core = "0.1.0-beta.1"
-miter-engine = "0.1.0-alpha.2"
+batten-core = { path = "../batten-core", version = "0.1.0-beta.2" }
+dado-core = "0.1.0-beta.2"
+miter-engine = "0.1.0-alpha.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 thiserror = "2.0"
