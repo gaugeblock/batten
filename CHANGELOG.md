@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.1.0-beta.3] - 2026-05-09
+
+### Added
+- `batten`: initialize local backlog store with `BA` prefix (3944aa4).
+
+### Fixed
+- No fixes in this release.
+
+### Changed
+- `batten`: standardize README and establish the 9-document architecture (5703ffe).
+
+### Maintenance
+- `batten`: update release history with alpha and beta milestones (4946fcf).
+
 ### Documentation
 - Standardize README to 9-section template and establish AST-grounded 9-document architecture
 
