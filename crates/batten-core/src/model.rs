@@ -3,27 +3,8 @@
 use miter_engine::Language;
 use serde::{Deserialize, Serialize};
 
-/// Supported grammar constraint formats across the `gaugeblock` suite.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum GrammarFormat {
-    /// llama.cpp and mistral.rs BNF format.
-    Gbnf,
-    /// llguidance, vLLM, and outlines EBNF format.
-    Lark,
-    /// Bounded regular expression pattern.
-    Regex,
-}
-
-impl std::fmt::Display for GrammarFormat {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Gbnf => write!(f, "gbnf"),
-            Self::Lark => write!(f, "lark"),
-            Self::Regex => write!(f, "regex"),
-        }
-    }
-}
+// `GrammarFormat` and its `Display` impl live in the shared contracts crate (GB-143).
+pub use gaugeblock_contracts::GrammarFormat;
 
 /// Kind of symbol binding inside a `LexicalScope`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -75,18 +56,8 @@ pub struct LexicalScope {
     pub available_imports: Vec<String>,
 }
 
-/// Compiled grammar constraint produced by `batten` from `(LexicalScope + TypedHole)`.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct CompiledGrammarConstraint {
-    /// Target hole identifier in the template (e.g. `query_expr`).
-    pub hole_id: String,
-    /// Format of the emitted grammar definition.
-    pub format: GrammarFormat,
-    /// Raw grammar definition (GBNF, Lark, or Regex string).
-    pub grammar_definition: String,
-    /// Allowed in-scope variable/function/constant identifiers.
-    pub allowed_identifiers: Vec<String>,
-}
+// `CompiledGrammarConstraint` lives in the shared contracts crate (GB-143).
+pub use gaugeblock_contracts::CompiledGrammarConstraint;
 
 /// Two-tier classification of a symbol candidate.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
