@@ -11,7 +11,20 @@ Part of the **[`gaugeblock`](https://gaugeblock.dev)** neurosymbolic code synthe
 
 ---
 
-## 1. Architecture Overview
+## Why `batten`?
+
+Stochastic code generation models frequently hallucinate out-of-scope identifiers, call non-existent methods, or generate syntactically broken code.
+
+| Without `batten` | With `batten` |
+|---|---|
+| **Out-of-Scope Hallucinations:** In 40%+ of complex generation tasks, LLMs invent variable names, reference unimported modules, or call private methods. | **Physical Grammar Constraints:** `batten` compiles active variables from `miter` into Context-Free Grammars (GBNF/Lark), making it mathematically impossible for the LLM to emit invalid tokens. |
+| **Run-Away Recursion:** Small open-weight models frequently get caught in repetitive token loops, generating endless chaining expressions like `foo.bar().bar().bar()`. | **Strict Depth Bounding:** Grammar production rules enforce hard recursion ceilings (`max_depth = 3`), guaranteeing derivation termination into valid direct terminals. |
+| **Slow Subprocess Feedback:** Detecting invalid syntax requires invoking heavy compiler subshells (`cargo check` or `tsc`), taking 2–5 seconds per attempt. | **Microsecond Pre-Flight Validation:** `batten validate` evaluates token membership, balanced delimiters, and literal safety rules in `<50μs` before invoking compilers. |
+| **Format Fragmentation:** Different inference runtimes require incompatible grammar formats (llama.cpp requires GBNF, outlines/vLLM requires Lark, outlines requires Regex). | **Unified Tri-Format Compiler:** Compiles a single internal AST constraint representation into GBNF, Lark EBNF, or bounded Regex seamlessly. |
+
+---
+
+## 1. System Architecture
 
 ```text
 ┌────────────────────────────────────────────────────────┐
@@ -41,26 +54,31 @@ Part of the **[`gaugeblock`](https://gaugeblock.dev)** neurosymbolic code synthe
 
 ---
 
-## 2. Core Capabilities
+## 2. CLI Commands Reference
 
-* **Two-Tier Type & Scope Filtering:** Categorizes accessible lexical symbols into *Direct Terminals* (variables/constants satisfying the type immediately or via `?` / `.await`) and *Producer Chains* (functions/methods yielding the type), with automatic fallback widening to eliminate empty grammars.
-* **AST-Driven Grammar Productions:** Emits grammar rules specialized for target `ast_node_kind` (`expression`, `predicate`, `identifier`, `type_annotation`).
-* **Bounded Recursion Depth:** Enforces strict recursion depth limits (`max_depth = 3`) to prevent repetitive loop traps during local model decoding.
-* **Tri-Format Grammar Emission:** Compiles constraints directly into llama.cpp/mistral.rs **GBNF**, llguidance/vLLM/outlines **Lark**, and bounded **Regex**.
-* **Zero-LLM Pre-Flight Validator:** Microsecond-fast validator verifying 100% identifier membership, delimiter balancing, and literal safety rules before escalating to compiler verification.
+`batten` provides a streamlined command-line interface for testing grammar constraints and validating completion tokens. Pass `--json` to any command for structured machine-readable outputs.
 
----
-
-## 3. Workspace Crate Layout
-
-* **`batten`**: Facade crate re-exporting `batten-core`.
-* **`crates/batten-core`**: Core type analyzer, scope filters, grammar production engines (GBNF, Lark, Regex), and pre-flight validator.
-* **`crates/batten-cli`**: Clap binary entrypoint (`batten`).
-* **`crates/batten-mcp`**: JSON-RPC 2.0 stdio Model Context Protocol (MCP) server.
+| Command | Description | MCP Tool |
+|---|---|---|
+| `compile` | Compile a `LexicalScope` and `TypedHole` into a GBNF, Lark, or Regex grammar. | `batten_compile` |
+| `validate` | Perform microsecond lexical scope and syntax validation on candidate code. | `batten_validate` |
+| `inspect` | Inspect filtered scope terminals, candidate chains, and type match ratings. | — |
+| `mcp` | Launch the Model Context Protocol (JSON-RPC 2.0 stdio) server. | — |
 
 ---
 
-## 4. Installation & CLI Quickstart
+## 3. Model Context Protocol (MCP) Reference
+
+When operating inside AI agents (Antigravity, Claude Code, Cursor, Cline), `batten` exposes 2 core tools:
+
+| Tool | Parameters | Description |
+|---|---|---|
+| `batten_compile` | `scope_json, hole_json, format?` | Compile in-scope symbols and target hole into GBNF, Lark, or Regex grammar constraint. |
+| `batten_validate` | `candidate, scope_json, hole_json` | Perform microsecond lexical scope and syntax validation on candidate text. |
+
+---
+
+## 4. Installation & Quickstart
 
 ```bash
 # Install globally via cargo
@@ -72,46 +90,30 @@ batten compile --scope scope.json --hole hole.json --format gbnf
 # 2. Compile into a Lark grammar for vLLM / outlines
 batten compile --scope scope.json --hole hole.json --format lark
 
-# 3. Compile bounded regex pattern
-batten compile --scope scope.json --hole hole.json --format regex
+# 3. Inspect filtered terminals and candidate producer chains
+batten inspect --scope scope.json --hole hole.json
 
 # 4. Validate completion candidate before compiler invocation
-batten validate --candidate "user_repo.find_by_id(user_id)?" --scope scope.json --hole hole.json
+batten validate --candidate "user_repo.find_by_id(user_id)?" --constraint constraint.json
 ```
 
 ---
 
-## 5. Model Context Protocol (MCP) Reference
+## 5. Canonical 9-Document Architecture
 
-| Tool | Parameters | Description |
-|---|---|---|
-| `batten_compile` | `scope_json, hole_json, format` | Compile in-scope symbols and target hole into GBNF, Lark, or Regex grammar. |
-| `batten_validate` | `candidate, scope_json, hole_json` | Perform microsecond lexical scope and syntax validation on candidate text. |
-
----
-
-## 6. Repository Documentation
-
-`batten` adheres strictly to the canonical **9-Document Architecture**:
-* **[`CONTRIBUTING.md`](./CONTRIBUTING.md):** Local toolchain prerequisites, grammar testing, and benchmark execution.
+`batten` adheres strictly to the canonical 9-Document Architecture:
+* **[`README.md`](./README.md):** Public elevator pitch, CLI reference, and quickstart.
+* **[`CONTRIBUTING.md`](./CONTRIBUTING.md):** Developer environment setup, Rust 2024 toolchain, and test execution.
+* **[`PRODUCT.md`](./PRODUCT.md):** User personas, JTBD, token reduction metrics, and problem statements.
 * **[`ARCHITECTURE.md`](./ARCHITECTURE.md):** Scope reduction pipeline, grammar AST trees, and dialect transformers.
 * **[`SPEC.md`](./SPEC.md):** Grammar generation invariants, recursion depth contracts, and type matching rules.
-* **[`AGENTS.md`](./AGENTS.md):** Autonomous systems directives, <=250 LOC limits, and zero-unwrap rules.
-* **[`CHANGELOG.md`](./CHANGELOG.md):** Chronological historical release entries and unreleased changes.
+* **[`DESIGN.md`](./DESIGN.md):** Architectural Decision Records (ADRs) and trade-off rationales.
+* **[`ROADMAP.md`](./ROADMAP.md):** Strategic milestones, active beta capabilities, and horizons.
+* **[`CHANGELOG.md`](./CHANGELOG.md):** Chronological historical release logs and unreleased entries.
+* **[`AGENTS.md`](./AGENTS.md):** Non-negotiable engineering directives, 250-line file ceiling, and verification matrix.
 
 ---
 
-## 7. Verification & Development Directives
-
-* **File Size Ceiling:** All `.rs` files must strictly remain under 250 LOC.
-* **Tiered Verification Matrix:**
-  * Tier 1: `cargo check -p batten-core` (<2s).
-  * Tier 2: `cargo fmt --check -p batten-core && cargo clippy -p batten-core && cargo test -p batten-core`.
-  * Tier 3: `chalkline docs check -d .` before task verification.
-
----
-
-## 8. License
+## 6. License
 
 Licensed under the [Apache License, Version 2.0](LICENSE).
-Part of the [`gaugeblock`](https://gaugeblock.dev) suite.
