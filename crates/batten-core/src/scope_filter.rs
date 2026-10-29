@@ -82,7 +82,7 @@ fn is_value_symbol(kind: ScopeSymbolKind) -> bool {
 pub fn filter_bindings(bindings: &[SymbolBinding], hole: &TypedHole) -> FilteredScope {
     let scope = LexicalScope {
         repo_relative_path: "memory".to_string(),
-        language: miter_engine::Language::Rust,
+        language: gaugeblock_contracts::Language::Rust,
         enclosing_symbol: None,
         bindings: bindings.to_vec(),
         available_imports: Vec::new(),

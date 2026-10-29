@@ -1,6 +1,6 @@
 //! Core data models and schemas for `batten-core`.
 
-use miter_engine::Language;
+use gaugeblock_contracts::Language;
 use serde::{Deserialize, Serialize};
 
 // `GrammarFormat` and its `Display` impl live in the shared contracts crate (GB-143).
@@ -46,7 +46,6 @@ pub struct LexicalScope {
     /// Path of the source file relative to repository root.
     pub repo_relative_path: String,
     /// Target language.
-    #[serde(with = "dado_core::language_serde")]
     pub language: Language,
     /// Name of enclosing function, method, or block.
     pub enclosing_symbol: Option<String>,

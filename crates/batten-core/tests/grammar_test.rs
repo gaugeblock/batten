@@ -2,7 +2,7 @@ use batten_core::{
     GrammarFormat, LexicalScope, ScopeSymbolKind, SymbolBinding, compile_grammar, filter_bindings,
 };
 use dado_core::TypedHole;
-use miter_engine::Language;
+use gaugeblock_contracts::Language;
 
 #[test]
 fn test_compile_gbnf_identifier() -> Result<(), Box<dyn std::error::Error>> {
