@@ -105,10 +105,7 @@ dependencies = [
  "batten-mcp",
  "clap",
  "dado-core",
- "serde",
  "serde_json",
- "thiserror 2.0.21",
- "tracing",
  "tracing-subscriber",
 ]
 
@@ -118,13 +115,11 @@ version = "0.1.0-beta.4"
 dependencies = [
  "dado-core",
  "gaugeblock-contracts",
- "miter-engine",
  "regex",
  "serde",
  "serde_json",
  "tempfile",
  "thiserror 2.0.21",
- "tracing",
 ]
 
 [[package]]
@@ -133,11 +128,8 @@ version = "0.1.0-beta.4"
 dependencies = [
  "batten-core",
  "dado-core",
- "miter-engine",
- "serde",
  "serde_json",
  "tempfile",
- "thiserror 2.0.21",
  "tracing",
 ]
 
