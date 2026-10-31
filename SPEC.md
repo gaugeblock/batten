@@ -72,6 +72,7 @@ stateDiagram-v2
 - **`model::CompiledGrammarConstraint`** (`struct`): Output artifact containing the grammar text, format, allowed terminals, and metadata.
 - **`tokens::ExtractedTokens`** (`struct`): Tokenized representation of a candidate fill for pre-flight checking.
 - **`model::FilteredScope`** (`struct`): Categorized symbols partitioned into direct terminals and producer chains for a typed hole.
+- **`lib::BattenHandler`** (`struct`): The server's tool surface, implementing `McpHandler` so the stdio loop comes from `gaugeblock-mcp`; its dispatcher still builds the MCP envelope, carried through as `ToolOutcome::Raw`.
 - **`args::FormatArg`** (`enum`): CLI argument format choice (`Gbnf`, `Lark`, `Regex`).
 - **`mod::GrammarConfig`** (`struct`): Configuration parameters controlling recursion depth, literal allowance, and formats.
 - **`model::GrammarFormat`** (`enum`): Supported grammar dialects across the suite (`Gbnf`, `Lark`, `Regex`).
