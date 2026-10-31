@@ -6,107 +6,53 @@
 pub mod dispatch;
 pub mod schema;
 
-use dispatch::dispatch_tool;
-use schema::list_tools;
-use serde_json::{Value, json};
-use std::io::{self, BufRead, Write};
+use gaugeblock_mcp::{McpHandler, RpcResponse, ToolOutcome};
+use serde_json::Value;
+use std::io::{self};
 
 /// MCP server version.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
-/// Runs the stdio JSON-RPC 2.0 MCP server loop over stdin and stdout.
-pub fn run_stdio_server() -> Result<(), Box<dyn std::error::Error>> {
-    let stdin = io::stdin();
-    let mut stdout = io::stdout();
+/// `batten`'s tool surface.
+#[derive(Debug, Default)]
+pub struct BattenHandler;
 
-    tracing::info!("Starting batten-mcp stdio server loop");
-
-    for line_res in stdin.lock().lines() {
-        let line = match line_res {
-            Ok(l) => l,
-            Err(e) => {
-                tracing::error!("Failed to read stdin line: {e}");
-                break;
-            }
-        };
-
-        let trimmed = line.trim();
-        if trimmed.is_empty() {
-            continue;
-        }
-
-        let msg: Value = match serde_json::from_str(trimmed) {
-            Ok(v) => v,
-            Err(e) => {
-                tracing::error!("Failed to parse JSON-RPC message: {e}");
-                continue;
-            }
-        };
-
-        if let Some(resp) = handle_message(&msg) {
-            let resp_str = serde_json::to_string(&resp)?;
-            writeln!(stdout, "{resp_str}")?;
-            stdout.flush()?;
-        }
+impl McpHandler for BattenHandler {
+    fn server_name(&self) -> &str {
+        "batten-mcp"
     }
 
+    fn list_tools(&self) -> Value {
+        Value::Array(schema::list_tools())
+    }
+
+    fn call_tool(&self, name: &str, arguments: &Value) -> ToolOutcome {
+        // The dispatcher still builds the MCP envelope itself; `Raw` carries it through untouched.
+        ToolOutcome::Raw(dispatch::dispatch_tool(name, arguments))
+    }
+}
+
+/// Runs the stdio JSON-RPC 2.0 MCP server loop over stdin and stdout.
+///
+/// # Errors
+///
+/// Returns the I/O failure when stdin cannot be read or stdout cannot be written.
+pub fn run_stdio_server() -> Result<(), Box<dyn std::error::Error>> {
+    tracing::info!("Starting batten-mcp stdio server loop");
+    let stdin = io::stdin();
+    let mut stdout = io::stdout();
+    gaugeblock_mcp::serve(stdin.lock(), &mut stdout, &BattenHandler)?;
     Ok(())
 }
 
 /// Handles a single JSON-RPC 2.0 message and generates a response.
+///
+/// Kept because the existing tests drive the server this way; the line-shaped entry point lives in
+/// `gaugeblock-mcp`, so this is a thin adapter rather than a second implementation.
 #[must_use]
 pub fn handle_message(msg: &Value) -> Option<Value> {
-    let id = msg.get("id").cloned();
-    let method = msg.get("method").and_then(|v| v.as_str())?;
-
-    match method {
-        "initialize" => Some(json!({
-            "jsonrpc": "2.0",
-            "id": id,
-            "result": {
-                "protocolVersion": "2024-11-05",
-                "capabilities": {
-                    "tools": {}
-                },
-                "serverInfo": {
-                    "name": "batten-mcp",
-                    "version": VERSION
-                }
-            }
-        })),
-        "notifications/initialized" => None,
-        "tools/list" => Some(json!({
-            "jsonrpc": "2.0",
-            "id": id,
-            "result": {
-                "tools": list_tools()
-            }
-        })),
-        "tools/call" => {
-            let params = msg.get("params");
-            let tool_name = params
-                .and_then(|p| p.get("name"))
-                .and_then(|v| v.as_str())
-                .unwrap_or("");
-            let arguments = params
-                .and_then(|p| p.get("arguments"))
-                .cloned()
-                .unwrap_or_else(|| json!({}));
-
-            let result = dispatch_tool(tool_name, &arguments);
-            Some(json!({
-                "jsonrpc": "2.0",
-                "id": id,
-                "result": result
-            }))
-        }
-        _ => Some(json!({
-            "jsonrpc": "2.0",
-            "id": id,
-            "error": {
-                "code": -32601,
-                "message": format!("Method not found: {method}")
-            }
-        })),
-    }
+    gaugeblock_mcp::handle_line(&msg.to_string(), &BattenHandler)
+        .ok()
+        .flatten()
+        .map(RpcResponse::into_value)
 }
