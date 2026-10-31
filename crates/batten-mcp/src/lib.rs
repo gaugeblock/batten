@@ -27,8 +27,11 @@ impl McpHandler for BattenHandler {
     }
 
     fn call_tool(&self, name: &str, arguments: &Value) -> ToolOutcome {
-        // The dispatcher still builds the MCP envelope itself; `Raw` carries it through untouched.
-        ToolOutcome::Raw(dispatch::dispatch_tool(name, arguments))
+        match dispatch::dispatch_tool(name, arguments) {
+            // The dispatcher formats its reports; the transport wraps them.
+            Ok(text) => ToolOutcome::Text(text),
+            Err(message) => ToolOutcome::Failed(message),
+        }
     }
 }
 
@@ -51,8 +54,5 @@ pub fn run_stdio_server() -> Result<(), Box<dyn std::error::Error>> {
 /// `gaugeblock-mcp`, so this is a thin adapter rather than a second implementation.
 #[must_use]
 pub fn handle_message(msg: &Value) -> Option<Value> {
-    gaugeblock_mcp::handle_line(&msg.to_string(), &BattenHandler)
-        .ok()
-        .flatten()
-        .map(RpcResponse::into_value)
+    gaugeblock_mcp::handle_line(&msg.to_string(), &BattenHandler).map(RpcResponse::into_value)
 }

@@ -5,34 +5,35 @@ use batten_core::{
     compile_grammar_with_config, filter_scope_for_hole, validate_candidate,
 };
 use dado_core::TypedHole;
-use serde_json::{Value, json};
+use serde_json::Value;
 
 /// Dispatches an incoming MCP tool invocation.
-pub fn dispatch_tool(name: &str, args: &Value) -> Value {
+///
+/// Returns the tool's text or a failure message. Building the MCP `content` envelope is not a tool's
+/// job: the transport owns what a result looks like on the wire (`GB-234`).
+///
+/// # Errors
+///
+/// The message shown to the caller when the arguments are unusable or the tool fails.
+pub fn dispatch_tool(name: &str, args: &Value) -> Result<String, String> {
     match name {
         "batten_compile" => handle_compile(args),
         "batten_validate" => handle_validate(args),
-        unknown => json!({
-            "isError": true,
-            "content": [{
-                "type": "text",
-                "text": format!("Unknown tool: {unknown}")
-            }]
-        }),
+        unknown => Err(format!("Unknown tool: {unknown}")),
     }
 }
 
-fn handle_compile(args: &Value) -> Value {
+fn handle_compile(args: &Value) -> Result<String, String> {
     let scope: LexicalScope =
         match serde_json::from_value(args.get("scope").cloned().unwrap_or(Value::Null)) {
             Ok(s) => s,
-            Err(e) => return error_response(&format!("Invalid scope argument: {e}")),
+            Err(e) => return Err(format!("Invalid scope argument: {e}")),
         };
 
     let hole: TypedHole =
         match serde_json::from_value(args.get("hole").cloned().unwrap_or(Value::Null)) {
             Ok(h) => h,
-            Err(e) => return error_response(&format!("Invalid hole argument: {e}")),
+            Err(e) => return Err(format!("Invalid hole argument: {e}")),
         };
 
     let format = match args
@@ -43,7 +44,7 @@ fn handle_compile(args: &Value) -> Value {
         "gbnf" => GrammarFormat::Gbnf,
         "lark" => GrammarFormat::Lark,
         "regex" => GrammarFormat::Regex,
-        other => return error_response(&format!("Unsupported grammar format: {other}")),
+        other => return Err(format!("Unsupported grammar format: {other}")),
     };
 
     let max_depth = args.get("max_depth").and_then(|v| v.as_u64()).unwrap_or(3) as usize;
@@ -51,29 +52,22 @@ fn handle_compile(args: &Value) -> Value {
 
     let filtered = filter_scope_for_hole(&scope, &hole);
     match compile_grammar_with_config(&filtered, &hole, format, &config) {
-        Ok(constraint) => match serde_json::to_string_pretty(&constraint) {
-            Ok(json_str) => json!({
-                "content": [{
-                    "type": "text",
-                    "text": json_str
-                }]
-            }),
-            Err(e) => error_response(&format!("Serialization error: {e}")),
-        },
-        Err(e) => error_response(&format!("Compilation error: {e}")),
+        Ok(constraint) => serde_json::to_string_pretty(&constraint)
+            .map_err(|e| format!("Serialization error: {e}")),
+        Err(e) => Err(format!("Compilation error: {e}")),
     }
 }
 
-fn handle_validate(args: &Value) -> Value {
+fn handle_validate(args: &Value) -> Result<String, String> {
     let candidate = match args.get("candidate").and_then(|v| v.as_str()) {
         Some(c) => c,
-        None => return error_response("Missing required 'candidate' string"),
+        None => return Err("Missing required 'candidate' string".to_string()),
     };
 
     let constraint: CompiledGrammarConstraint =
         match serde_json::from_value(args.get("constraint").cloned().unwrap_or(Value::Null)) {
             Ok(c) => c,
-            Err(e) => return error_response(&format!("Invalid constraint argument: {e}")),
+            Err(e) => return Err(format!("Invalid constraint argument: {e}")),
         };
 
     let allow_literals = args
@@ -87,23 +81,5 @@ fn handle_validate(args: &Value) -> Value {
 
     let report = validate_candidate(candidate, &constraint, allow_literals, max_tokens);
 
-    match serde_json::to_string_pretty(&report) {
-        Ok(json_str) => json!({
-            "content": [{
-                "type": "text",
-                "text": json_str
-            }]
-        }),
-        Err(e) => error_response(&format!("Serialization error: {e}")),
-    }
-}
-
-fn error_response(msg: &str) -> Value {
-    json!({
-        "isError": true,
-        "content": [{
-            "type": "text",
-            "text": msg
-        }]
-    })
+    serde_json::to_string_pretty(&report).map_err(|e| format!("Serialization error: {e}"))
 }
