@@ -2,7 +2,7 @@
 
 use crate::error::Result;
 use crate::model::FilteredScope;
-use dado_core::TypedHole;
+use gaugeblock_contracts::TypedHole;
 
 /// Emits a bounded GBNF grammar definition for a typed hole.
 pub fn emit_gbnf(scope: &FilteredScope, hole: &TypedHole, max_depth: usize) -> Result<String> {

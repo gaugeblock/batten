@@ -2,7 +2,7 @@ use batten_core::{
     CandidateClassification, ScopeSymbolKind, SymbolBinding, TypeMatch,
     evaluate_type_compatibility, filter_bindings, normalize_type_str,
 };
-use dado_core::TypedHole;
+use gaugeblock_contracts::TypedHole;
 
 #[test]
 fn test_normalize_types() {

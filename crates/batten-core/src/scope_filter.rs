@@ -5,7 +5,7 @@ use crate::model::{
     SymbolBinding,
 };
 use crate::type_norm::{TypeMatch, evaluate_type_compatibility};
-use dado_core::TypedHole;
+use gaugeblock_contracts::TypedHole;
 use std::collections::BTreeSet;
 
 /// Filters a `LexicalScope` against a `TypedHole`, sorting candidates into two tiers.

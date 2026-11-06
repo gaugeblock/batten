@@ -6,7 +6,7 @@ pub mod regex;
 
 use crate::error::{BattenError, Result};
 use crate::model::{CompiledGrammarConstraint, FilteredScope, GrammarFormat};
-use dado_core::TypedHole;
+use gaugeblock_contracts::TypedHole;
 
 /// Configuration options for the grammar compiler.
 #[derive(Debug, Clone, PartialEq, Eq)]

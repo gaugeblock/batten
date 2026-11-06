@@ -2,7 +2,7 @@
 
 use crate::error::Result;
 use crate::model::FilteredScope;
-use dado_core::TypedHole;
+use gaugeblock_contracts::TypedHole;
 
 /// Emits a bounded Lark EBNF grammar definition for a typed hole.
 pub fn emit_lark(scope: &FilteredScope, hole: &TypedHole, max_depth: usize) -> Result<String> {

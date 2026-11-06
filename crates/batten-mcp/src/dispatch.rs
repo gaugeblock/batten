@@ -4,7 +4,7 @@ use batten_core::{
     CompiledGrammarConstraint, GrammarConfig, GrammarFormat, LexicalScope,
     compile_grammar_with_config, filter_scope_for_hole, validate_candidate,
 };
-use dado_core::TypedHole;
+use gaugeblock_contracts::TypedHole;
 use serde_json::Value;
 
 /// Dispatches an incoming MCP tool invocation.

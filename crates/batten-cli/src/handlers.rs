@@ -5,7 +5,7 @@ use batten_core::{
     CompiledGrammarConstraint, GrammarConfig, LexicalScope, compile_grammar_with_config,
     filter_scope_for_hole, validate_candidate,
 };
-use dado_core::TypedHole;
+use gaugeblock_contracts::TypedHole;
 use std::fs;
 use std::path::Path;
 

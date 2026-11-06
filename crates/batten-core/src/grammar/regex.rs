@@ -2,7 +2,7 @@
 
 use crate::error::Result;
 use crate::model::FilteredScope;
-use dado_core::TypedHole;
+use gaugeblock_contracts::TypedHole;
 
 /// Emits a bounded regular expression pattern for a typed hole.
 pub fn emit_regex(scope: &FilteredScope, hole: &TypedHole, _max_depth: usize) -> Result<String> {
