@@ -103,7 +103,7 @@ batten validate --candidate "user_repo.find_by_id(user_id)?" --constraint constr
 
 `batten` adheres strictly to the canonical 9-Document Architecture:
 * **[`README.md`](./README.md):** Public elevator pitch, CLI reference, and quickstart.
-* **[`CONTRIBUTING.md`](docs/CONTRIBUTING.md):** Developer environment setup, Rust 2024 toolchain, and test execution.
+* **[`CONTRIBUTING.md`](CONTRIBUTING.md):** Developer environment setup, Rust 2024 toolchain, and test execution.
 * **[`PRODUCT.md`](docs/PRODUCT.md):** User personas, JTBD, token reduction metrics, and problem statements.
 * **[`ARCHITECTURE.md`](docs/ARCHITECTURE.md):** Scope reduction pipeline, grammar AST trees, and dialect transformers.
 * **[`SPEC.md`](docs/SPEC.md):** Grammar generation invariants, recursion depth contracts, and type matching rules.
