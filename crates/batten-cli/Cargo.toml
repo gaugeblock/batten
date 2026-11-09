@@ -11,6 +11,7 @@ description = "Command-line interface and MCP server for batten"
 workspace = true
 
 [dependencies]
+gaugeblock-workspace = "0.1.0-beta.1"
 batten-core = { path = "../batten-core", version = "0.1.0-beta.4" }
 batten-mcp = { path = "../batten-mcp", version = "0.1.0-beta.4" }
 gaugeblock-contracts = "0.1.0-beta.1"
