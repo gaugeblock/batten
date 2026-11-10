@@ -1,0 +1,140 @@
+{
+  "events": [
+    {
+      "event": "task_created",
+      "task": {
+        "acceptance_criteria": [],
+        "active_claim": null,
+        "created_at_epoch_ms": 1793149846107,
+        "decisions": [],
+        "description": "Document dynamic variable scope to Context-Free Grammar (GBNF/Lark) compiler, token mask generator, scope filtering, state machines, ADRs, and domain AGENTS.md laws",
+        "edges": [],
+        "id": "4bb337e2-0730-4c2b-a0e2-044c9a384d16",
+        "kind": "feature",
+        "latest_handoff": null,
+        "plan": null,
+        "priority": 1,
+        "scope": {
+          "crate_name": "batten-core",
+          "labels": [],
+          "module_path": null,
+          "repo": "batten",
+          "target_files": [],
+          "target_symbols": []
+        },
+        "slug": "elevate-batten-documentation-across-all-9-canonical-documents-4bb337",
+        "status": "ready",
+        "ticket_key": "BA-1",
+        "title": "Elevate batten documentation across all 9 canonical documents",
+        "updated_at_epoch_ms": 1793149846107,
+        "verification_receipt": null
+      }
+    },
+    {
+      "edge": {
+        "kind": "parent_epic",
+        "target_id": "18bce0d8-44d5-46f7-a936-2a5152239485",
+        "target_repo": "workspace",
+        "target_ticket_key": "GB-110"
+      },
+      "event": "edge_added",
+      "task_id": "4bb337e2-0730-4c2b-a0e2-044c9a384d16",
+      "timestamp_ms": 1793149850967
+    },
+    {
+      "claim": {
+        "agent_id": "agent-antigravity",
+        "base_commit_sha": "444e92a658ac942db69d9343d8e65a7981bd24b7",
+        "claimed_at_epoch_ms": 1793159246288,
+        "git_branch": "feat/batten-docs-elevation",
+        "lease_expires_at_epoch_ms": 1793162846288
+      },
+      "event": "task_claimed",
+      "task_id": "4bb337e2-0730-4c2b-a0e2-044c9a384d16"
+    },
+    {
+      "event": "status_changed",
+      "from": "ready",
+      "reason": "Claimed by agent-antigravity",
+      "task_id": "4bb337e2-0730-4c2b-a0e2-044c9a384d16",
+      "timestamp_ms": 1793159246288,
+      "to": "in_progress"
+    },
+    {
+      "event": "task_verified",
+      "receipt": {
+        "base_commit_sha": "444e92a658ac942db69d9343d8e65a7981bd24b7",
+        "chain_key": null,
+        "command": "n/a",
+        "commit_shas": [
+          "444e92a658ac942db69d9343d8e65a7981bd24b7"
+        ],
+        "diagnostic_count": null,
+        "exit_code": 0,
+        "git_branch": "feat/batten-docs-elevation",
+        "head_commit_sha": "444e92a658ac942db69d9343d8e65a7981bd24b7",
+        "repo": null,
+        "summary": "Elevated batten 9-document architecture to gold standard: SPEC formal contracts and grammar compilation state machines, ARCHITECTURE two-tier scope and tri-format emitter pipeline, DESIGN 5 concrete ADRs, PRODUCT vision and JTBD, README full CLI reference and Without/With table, CONTRIBUTING Rust setup, ROADMAP horizons, and chalkline 9-doc compliance",
+        "verified_at_epoch_ms": 1793159423283,
+        "verifier": "manual"
+      },
+      "task_id": "4bb337e2-0730-4c2b-a0e2-044c9a384d16"
+    },
+    {
+      "event": "task_archived",
+      "status": "verified",
+      "task_id": "4bb337e2-0730-4c2b-a0e2-044c9a384d16",
+      "timestamp_ms": 1794037977938
+    }
+  ],
+  "ticket": {
+    "acceptance_criteria": [],
+    "active_claim": null,
+    "archived_at_epoch_ms": 1794037977938,
+    "created_at_epoch_ms": 1793149846107,
+    "decisions": [],
+    "description": "Document dynamic variable scope to Context-Free Grammar (GBNF/Lark) compiler, token mask generator, scope filtering, state machines, ADRs, and domain AGENTS.md laws",
+    "edges": [
+      {
+        "kind": "parent_epic",
+        "target_id": "18bce0d8-44d5-46f7-a936-2a5152239485",
+        "target_repo": "workspace",
+        "target_ticket_key": "GB-110"
+      }
+    ],
+    "id": "4bb337e2-0730-4c2b-a0e2-044c9a384d16",
+    "kind": "feature",
+    "latest_handoff": null,
+    "plan": null,
+    "priority": 1,
+    "scope": {
+      "crate_name": "batten-core",
+      "labels": [],
+      "module_path": null,
+      "repo": "batten",
+      "target_files": [],
+      "target_symbols": []
+    },
+    "slug": "elevate-batten-documentation-across-all-9-canonical-documents-4bb337",
+    "status": "verified",
+    "ticket_key": "BA-1",
+    "title": "Elevate batten documentation across all 9 canonical documents",
+    "updated_at_epoch_ms": 1794037977938,
+    "verification_receipt": {
+      "base_commit_sha": "444e92a658ac942db69d9343d8e65a7981bd24b7",
+      "chain_key": null,
+      "command": "n/a",
+      "commit_shas": [
+        "444e92a658ac942db69d9343d8e65a7981bd24b7"
+      ],
+      "diagnostic_count": null,
+      "exit_code": 0,
+      "git_branch": "feat/batten-docs-elevation",
+      "head_commit_sha": "444e92a658ac942db69d9343d8e65a7981bd24b7",
+      "repo": null,
+      "summary": "Elevated batten 9-document architecture to gold standard: SPEC formal contracts and grammar compilation state machines, ARCHITECTURE two-tier scope and tri-format emitter pipeline, DESIGN 5 concrete ADRs, PRODUCT vision and JTBD, README full CLI reference and Without/With table, CONTRIBUTING Rust setup, ROADMAP horizons, and chalkline 9-doc compliance",
+      "verified_at_epoch_ms": 1793159423283,
+      "verifier": "manual"
+    }
+  }
+}
